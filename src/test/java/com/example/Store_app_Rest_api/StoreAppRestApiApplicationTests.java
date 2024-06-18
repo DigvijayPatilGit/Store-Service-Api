@@ -62,6 +62,18 @@ class StoreAppRestApiApplicationTests {
 
 	}
 
+	@Test
+	void shouldUpdate(){
+		createStore();
+		Store store = new Store(1,"Sonam","Mumbai",3355.76);
+		testRestTemplate.put("http://localhost:"+port+"/update/1",store);
+		List<LinkedHashMap> list = testRestTemplate.getForObject("http://localhost:"+port+"/getItem",List.class);
+		Assertions.assertEquals("Sonam",list.get(0).get("ownerName"));
+		Assertions.assertEquals(1,list.get(0).get("storeId"));
+		Assertions.assertEquals(3355.76,list.get(0).get("revenue"));
+		Assertions.assertEquals("Mumbai",list.get(0).get("location"));
+
+	}
 
 
 }

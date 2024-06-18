@@ -42,13 +42,13 @@ public class StoreService {
         }
     }
 
-    public Store updateStoreRecord(int id, @org.jetbrains.annotations.NotNull Store store){
-        Store store1 = repository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Store not found with id: " + id));
+    public Store updateStoreRecord(int id, Store store){
+        Store store1 = repository.findById(id).get();
+
         store1.setOwnerName(store.getOwnerName());
         store1.setLocation(store.getLocation());
         store1.setRevenue(store.getRevenue());
-
+        repository.save(store1);
         return store1;
     }
 

@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class Handler {
 
@@ -15,8 +17,22 @@ public class Handler {
         StoreCustomeException customException = new StoreCustomeException(
                 HttpStatus.NOT_FOUND,
                 ex.getMessage(),
-                ex.getLocalizedMessage());
+                LocalDateTime.now());
         return new ResponseEntity<>(customException,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(IdNotFoundException.class)
+    protected ResponseEntity<?> handlerEntityNotFound(IdNotFoundException ex) {
+        StoreCustomeException customException = new StoreCustomeException(
+                HttpStatus.NOT_FOUND,
+                ex.getMsg(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(customException,HttpStatus.NOT_FOUND);
+    }
+
+
+
+
 
 }

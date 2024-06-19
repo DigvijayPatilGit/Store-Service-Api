@@ -1,6 +1,7 @@
 package com.example.Store_app_Rest_api.service;
 
 import com.example.Store_app_Rest_api.entity.Store;
+import com.example.Store_app_Rest_api.exception.IdNotFoundException;
 import com.example.Store_app_Rest_api.repository.Store_Repository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,12 @@ public class StoreService {
     }
 
     public Optional<Store> findById(int id){
-        return repository.findById(id);
+        if(repository.findById(id).isPresent()){
+            return repository.findById(id);
+        }
+        else{
+            throw new IdNotFoundException("Sorry, given ID Not present in record");
+        }
     }
 
     public String deleteById(int id){

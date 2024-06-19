@@ -11,14 +11,12 @@ public class StoreCustomeException {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime localDateTime;
     private String message;
-    private String ErrorMessage;
 
-    public StoreCustomeException(HttpStatus httpStatus, String message, String errorMessage) {
+    public StoreCustomeException(HttpStatus httpStatus, String message, LocalDateTime now) {
         this.httpStatus = httpStatus;
         this.code = httpStatus.value();
         this.localDateTime = LocalDateTime.now();
         this.message = message;
-        ErrorMessage = errorMessage;
     }
 
     public HttpStatus getHttpStatus() {
@@ -53,11 +51,4 @@ public class StoreCustomeException {
         this.message = message;
     }
 
-    public String getErrorMessage() {
-        return ErrorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        ErrorMessage = errorMessage;
-    }
 }

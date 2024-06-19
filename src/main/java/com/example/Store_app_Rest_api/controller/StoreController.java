@@ -49,6 +49,11 @@ public class StoreController {
         return service.getAllStoreInfo();
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> findById(@PathVariable int id){
+        return new ResponseEntity<>(service.findById(id),HttpStatus.FOUND);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateStoreInfo(@PathVariable int id, @RequestBody Store updateStore){
         Store store = service.updateStoreRecord(id,updateStore);

@@ -3,6 +3,7 @@ package com.example.Store_app_Rest_api.controller;
 import com.example.Store_app_Rest_api.dto.ResponseStore;
 import com.example.Store_app_Rest_api.entity.Store;
 import com.example.Store_app_Rest_api.service.StoreService;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,15 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @RestController
 public class StoreController {
 
-    //Logger logger = (Logger) LoggerFactory.getLogger(StoreController.class.getName());
-
     @Autowired
     private StoreService service;
+
+    private Logger logger = LoggerFactory.getLogger(StoreController.class);
+
 
     @PostMapping("/addItem")
     public ResponseEntity<?> addItemToStore(@RequestBody Store store){
@@ -40,7 +41,7 @@ public class StoreController {
 
         HttpStatus status = (id > 0) ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
 
-       // logger.info(responseStore.getMessage() + ". code: " + responseStore.getCode());
+        logger.info(responseStore.getMessage() + ". code: " + responseStore.getCode());
         return ResponseEntity.status(status).body(responseStore);
     }
 
@@ -64,7 +65,7 @@ public class StoreController {
 
         HttpStatus status = (store != null) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
-       // logger.info(responseStore.getMessage() + ". code: " + responseStore.getCode());
+        logger.info(responseStore.getMessage() + ". code: " + responseStore.getCode());
         return ResponseEntity.status(status).body(responseStore);
     }
 
@@ -78,7 +79,7 @@ public class StoreController {
 
         HttpStatus status = (resultMessage.equals("No Id Present")) ? HttpStatus.NOT_FOUND : HttpStatus.OK;
 
-        //logger.info(responseStore.getMessage() + ". code: " + responseStore.getCode());
+        logger.info(responseStore.getMessage() + ". code: " + responseStore.getCode());
         return ResponseEntity.status(status).body(responseStore);
     }
 

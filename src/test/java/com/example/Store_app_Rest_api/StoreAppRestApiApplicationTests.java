@@ -75,5 +75,17 @@ class StoreAppRestApiApplicationTests {
 
 	}
 
+	@Test
+	void shouldDeleteTheRecord(){
+		createStore();
+		createStore();
+		List<LinkedHashMap> beforeList = testRestTemplate.getForObject("http://localhost:"+port+"/getItem",List.class);
+		testRestTemplate.delete("http://localhost:"+port+"/delete/1");
+		List<LinkedHashMap> afterlist = testRestTemplate.getForObject("http://localhost:"+port+"/getItem",List.class);
+		Assertions.assertEquals(beforeList.size()-1,afterlist.size());
+	}
+
+
+
 
 }

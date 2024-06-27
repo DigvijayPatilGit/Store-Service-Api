@@ -24,6 +24,10 @@ public class StoreController {
     private Logger logger = LoggerFactory.getLogger(StoreController.class);
 
 
+    @Operation(
+            tags = "Post store information",
+            description = "Adding the store information"
+    )
     //@Hidden - Hide api in swagger UI
     @PostMapping("/addItem")
     public ResponseEntity<?> addItemToStore(@RequestBody Store store){
@@ -89,6 +93,10 @@ public class StoreController {
         return new ResponseEntity<>(service.findById(id),HttpStatus.FOUND);
     }
 
+    @Operation(
+            tags = "Update store information",
+            description = "Update the store information by ID"
+    )
     //@Hidden - Hide api in swagger UI
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateStoreInfo(@PathVariable int id, @RequestBody Store updateStore){
@@ -104,6 +112,10 @@ public class StoreController {
         return ResponseEntity.status(status).body(responseStore);
     }
 
+    @Operation(
+            tags = "Delete store information",
+            description = "Deleting the store information by ID"
+    )
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteStoreRecord(@PathVariable int id){
         String resultMessage = service.deleteById(id);

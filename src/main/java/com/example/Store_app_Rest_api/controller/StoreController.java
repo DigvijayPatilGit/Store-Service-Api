@@ -3,6 +3,9 @@ package com.example.Store_app_Rest_api.controller;
 import com.example.Store_app_Rest_api.dto.ResponseStore;
 import com.example.Store_app_Rest_api.entity.Store;
 import com.example.Store_app_Rest_api.service.StoreService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ public class StoreController {
     private Logger logger = LoggerFactory.getLogger(StoreController.class);
 
 
+    //@Hidden - Hide api in swagger UI
     @PostMapping("/addItem")
     public ResponseEntity<?> addItemToStore(@RequestBody Store store){
         int id = service.addItem(store);
@@ -45,16 +49,47 @@ public class StoreController {
         return ResponseEntity.status(status).body(responseStore);
     }
 
+    //For customize response and method description
+    @Operation(
+            tags = "Get store information",
+            description = "Get the list of all stores information",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Data Not Found",
+                            responseCode = "404"
+                    )
+            }
+    )
     @GetMapping("/getItem")
     public List<Store> getAllStoreItems(){
         return service.getAllStoreInfo();
     }
 
+    //For customize response and method description
+    @Operation(
+            tags = "Get by ID",
+            description = "Get the information by given ID",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Data Not Found",
+                            responseCode = "404"
+                    )
+            }
+    )
     @GetMapping("/get/{id}")
     public ResponseEntity<?> findById(@PathVariable int id){
         return new ResponseEntity<>(service.findById(id),HttpStatus.FOUND);
     }
 
+    //@Hidden - Hide api in swagger UI
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateStoreInfo(@PathVariable int id, @RequestBody Store updateStore){
         Store store = service.updateStoreRecord(id,updateStore);

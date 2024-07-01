@@ -5,18 +5,19 @@ import com.example.Store_app_Rest_api.entity.Store;
 import com.example.Store_app_Rest_api.service.StoreService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
+import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
+import java.util.Collections;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,6 +36,7 @@ public class StoreIntegrationTesting {
 
     @Autowired
     private ObjectMapper objectMapper;
+
 
     @Test
     void shouldCreateStoreRecord_WhenRecordIsSuccessFullySaved() throws Exception {
@@ -94,4 +96,17 @@ public class StoreIntegrationTesting {
                 .andExpect(jsonPath("$.message", org.hamcrest.Matchers.is("test message")));
     }
 
+    @Test
+    void shouldGetRespond_WhenItPresent() throws Exception{
+        Store store = new Store(0,"Raman","Pune",234455.76);
+        Mockito.when(service.getAllStoreInfo()).thenReturn(Collections.singletonList(store));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/getItem")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].ownerName").value("Raman"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].location").value("Pune"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].revenue").value(234455.76));
+
+    }
 }

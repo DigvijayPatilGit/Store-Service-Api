@@ -2,6 +2,8 @@ package com.example.Store_app_Rest_api.controller;
 
 import com.example.Store_app_Rest_api.dto.ResponseStore;
 import com.example.Store_app_Rest_api.entity.Store;
+import com.example.Store_app_Rest_api.exception.IdNotFoundException;
+import com.example.Store_app_Rest_api.exception.NoSuchDataFoundException;
 import com.example.Store_app_Rest_api.service.StoreService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,7 +72,14 @@ public class StoreController {
     )
     @GetMapping("/getItem")
     public List<Store> getAllStoreItems(){
-        return service.getAllStoreInfo();
+        List<Store> list =  service.getAllStoreInfo();
+
+        if(!list.isEmpty()){
+            return list;
+        }
+        else{
+            throw new NoSuchDataFoundException("Sorry, Data Not Present!");
+        }
     }
 
     //For customize response and method description
@@ -90,7 +99,14 @@ public class StoreController {
     )
     @GetMapping("/get/{id}")
     public ResponseEntity<?> findById(@PathVariable int id){
-        return new ResponseEntity<>(service.findById(id),HttpStatus.FOUND);
+//        if(service.findById(id).isEmpty()){
+//            throw new IdNotFoundException("Sorry, Id you are looking for not present!");
+//        }
+//        return new ResponseEntity<>(service.findById(id),HttpStatus.FOUND);
+        return service.findById(id)
+                .map(store -> ResponseEntity.ok().body(store))
+                .orElseThrow(() -> new IdNotFoundException("Sorry, Id you are looking for not present!"));
+
     }
 
     @Operation(
@@ -129,6 +145,5 @@ public class StoreController {
         logger.info(responseStore.getMessage() + ". code: " + responseStore.getCode());
         return ResponseEntity.status(status).body(responseStore);
     }
-
 
 }

@@ -22,10 +22,20 @@ public class Handler {
     }
 
     @ExceptionHandler(IdNotFoundException.class)
-    protected ResponseEntity<?> handlerEntityNotFound(IdNotFoundException ex) {
+    protected ResponseEntity<?> handlerIdNotFoundException(IdNotFoundException ex) {
         StoreCustomeException customException = new StoreCustomeException(
                 HttpStatus.NOT_FOUND,
                 ex.getMsg(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(customException,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoSuchDataFoundException.class)
+    protected ResponseEntity<?> handlerNoSuchDataFoundException(NoSuchDataFoundException ex1) {
+        StoreCustomeException customException = new StoreCustomeException(
+                HttpStatus.NOT_FOUND,
+                ex1.getMsg(),
                 LocalDateTime.now());
 
         return new ResponseEntity<>(customException,HttpStatus.NOT_FOUND);

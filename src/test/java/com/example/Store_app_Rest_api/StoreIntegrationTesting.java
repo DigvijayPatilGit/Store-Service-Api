@@ -109,4 +109,21 @@ public class StoreIntegrationTesting {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].revenue").value(234455.76));
 
     }
+
+    @Test
+    void shouldNotGetRespond_WhenItNotPresent() throws Exception{
+        Mockito.when(service.getAllStoreInfo()).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/getItem")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(result -> {
+                    String errorMessage = result.getResponse().getContentAsString();
+                    // Verify the error message which return
+                    if (!errorMessage.contains("Sorry, Data Not Present!")) {
+                        throw new AssertionError("Expected error message not found");
+                    }
+                });
+
+    }
 }
